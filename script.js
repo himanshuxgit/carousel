@@ -4,12 +4,13 @@ const nextButton = document.querySelector('.next-arrow');
 const prevButton = document.querySelector('.prev-arrow');
 const dots = document.querySelectorAll('.dot');
 
-let containerWidth; // Width of the container
+let containerWidth;
 let currentIndex = 0;
+let slideInterval;
 
 function setContainerWidth() {
-    containerWidth = images[0].clientWidth; // Width of the first image
-    carousel.style.width = `${containerWidth}px`; // Set the width of the carousel
+    containerWidth = images[0].clientWidth;
+    carousel.style.width = `${containerWidth}px`;
 }
 
 function showSlide(index) {
@@ -47,6 +48,23 @@ dots.forEach((dot, index) => {
     });
 });
 
-setContainerWidth(); // Call this to set the initial container width
+function goToNextSlide() {
+    currentIndex = (currentIndex + 1) % images.length;
+    showSlide(currentIndex);
+}
+
+function startSlideShow() {
+    slideInterval = setInterval(goToNextSlide, 5000); // Change interval duration as needed
+}
+
+function stopSlideShow() {
+    clearInterval(slideInterval);
+}
+
+carousel.addEventListener('mouseover', stopSlideShow);
+carousel.addEventListener('mouseout', startSlideShow);
+
+setContainerWidth();
 showSlide(currentIndex);
 updateButtons();
+startSlideShow();
